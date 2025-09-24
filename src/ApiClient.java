@@ -1,3 +1,5 @@
+import com.google.gson.Gson;
+
 import java.io.IOException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -22,6 +24,12 @@ public class ApiClient {
             return "error,Lol";
         }//Il postino che manda il pacco
 
+        Gson gson = new Gson();
+        ApiResponse apiResponse = gson.fromJson(response.body(),ApiResponse.class);
+        for(ApiQuestions question : apiResponse.results ){
+            System.out.print(question.questions);
+            System.out.println(question.correct_answer);
+        }
         return response.body();
     }
 
