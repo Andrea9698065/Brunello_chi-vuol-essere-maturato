@@ -4,7 +4,7 @@ public class ApiQuestions {
     public String category;
     public String type;
     public String difficulty;
-    public String questions;
+    public String question;
     public String correct_answer;
     public List<String> incorrect_answers;
 

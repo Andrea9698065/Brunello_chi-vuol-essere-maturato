@@ -1,5 +1,5 @@
 import com.google.gson.Gson;
-
+import java.net.URI;
 import java.io.IOException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -14,23 +14,31 @@ public class ApiClient {
 
         HttpRequest request = HttpRequest.newBuilder()//Chi fa la richiesta
                 .header("Content-Type","application/json")
-                .uri(java.net.URI.create(url))
+                .uri(URI.create(url))
                 .GET()
                 .build();
         HttpResponse<String> response;//Oggetto 'mandato'
         try{
             response = client.send(request,HttpResponse.BodyHandlers.ofString());
-        }catch(IOException | InterruptedException e){
+        } catch(IOException | InterruptedException e){
             return "error,Lol";
-        }//Il postino che manda il pacco
+        }
+
+
+
+        if (response == null){
+            throw new RuntimeException("No risposta ricevuta da api");
+        }
+        //Il postino che manda il pacco
 
         Gson gson = new Gson();
         ApiResponse apiResponse = gson.fromJson(response.body(),ApiResponse.class);
-        for(ApiQuestions question : apiResponse.results ){
-            System.out.print(question.questions);
-            System.out.println(question.correct_answer);
+        for(ApiQuestions q : apiResponse.results ){
+            System.out.print(q.question);
+            System.out.println("  Risposta corretta : "+ q.correct_answer);
         }
-        return response.body();
+       return response.body();
+
     }
 
 }
